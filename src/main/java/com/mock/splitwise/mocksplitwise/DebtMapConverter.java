@@ -10,11 +10,11 @@ import java.io.IOException;
 import java.util.Map;
 
 @Converter
-public class DebtMapConverter implements AttributeConverter<Map<Integer, Integer>, String> {
+public class DebtMapConverter implements AttributeConverter<Map<String, Integer>, String> {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
-    public String convertToDatabaseColumn(Map<Integer, Integer> debts) {
+    public String convertToDatabaseColumn(Map<String, Integer> debts) {
         try {
             return objectMapper.writeValueAsString(debts);
         } catch (JsonProcessingException e) {
@@ -23,7 +23,7 @@ public class DebtMapConverter implements AttributeConverter<Map<Integer, Integer
     }
 
     @Override
-    public Map<Integer, Integer> convertToEntityAttribute(String json) {
+    public Map<String, Integer> convertToEntityAttribute(String json) {
         try {
             return objectMapper.readValue(json, new TypeReference<>() {});
         } catch (IOException e) {

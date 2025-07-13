@@ -1,13 +1,11 @@
 package com.mock.splitwise.mocksplitwise.model;
 
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "users")
 public class User {
+    @Column(unique = true)
     private final String name;
     @Id
     private final Integer id;

@@ -3,16 +3,19 @@ package com.mock.splitwise.mocksplitwise.controller;
 import com.mock.splitwise.mocksplitwise.model.User;
 import com.mock.splitwise.mocksplitwise.services.ExpenseManager;
 import com.mock.splitwise.mocksplitwise.services.UserManager;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
+import java.util.List;
 
 @RestController
 public class RestSplitwiseController {
 
-    private UserManager userManager = new UserManager();
-    private ExpenseManager expenseManager = new ExpenseManager();
+    @Autowired
+    private UserManager userManager;
+    @Autowired
+    private ExpenseManager expenseManager;
 
     @GetMapping("/home/{user}/add")
     public ResponseEntity<?> addExpense(
@@ -21,7 +24,7 @@ public class RestSplitwiseController {
             @RequestParam Integer expense) {
 
         // Your search logic here
-        expenseManager.addExpense(userManager.getUser(user), userManager.getUser(borrower), expense);
+        expenseManager.addExpense(user, borrower, expense);
         return ResponseEntity.ok("addExpense: " + user + ", borrower: " + borrower + ", expense: " + expense);
     }
 
@@ -34,7 +37,7 @@ public class RestSplitwiseController {
     }
 
     @GetMapping("/home")
-    public HashMap<String, User> getAllUsers() {
+    public List<User> getAllUsers() {
         return userManager.getAllUsers();
     }
 }
