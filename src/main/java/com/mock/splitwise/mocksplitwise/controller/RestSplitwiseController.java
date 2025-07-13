@@ -1,34 +1,40 @@
 package com.mock.splitwise.mocksplitwise.controller;
 
-import com.mock.splitwise.mocksplitwise.model.Response;
+import com.mock.splitwise.mocksplitwise.model.User;
+import com.mock.splitwise.mocksplitwise.services.ExpenseManager;
+import com.mock.splitwise.mocksplitwise.services.UserManager;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
 
 @RestController
 public class RestSplitwiseController {
 
-    @GetMapping("/hello/{name}")
-    public Response helloPath(@PathVariable String name) {
-        return new Response(name);
-    }
+    private UserManager userManager = new UserManager();
+    private ExpenseManager expenseManager = new ExpenseManager();
 
-    @GetMapping("/search")
-    public ResponseEntity<?> searchBooks(
-            @RequestParam(required = false, defaultValue = "") String title,
-            @RequestParam(required = false, defaultValue = "") String author) {
+    @GetMapping("/home/{user}/add")
+    public ResponseEntity<?> addExpense(
+            @PathVariable String user,
+            @RequestParam String borrower,
+            @RequestParam Integer expense) {
 
         // Your search logic here
-//        return ResponseEntity.ok(1);
-        return ResponseEntity.ok("Searching for title: " + title + ", author: " + author);
+        expenseManager.addExpense(userManager.getUser(user), userManager.getUser(borrower), expense);
+        return ResponseEntity.ok("addExpense: " + user + ", borrower: " + borrower + ", expense: " + expense);
     }
 
-    @GetMapping("/hello")
-    public Response hello() {
-        return new Response("hello");
+    @GetMapping("/home/{username}")
+    public User showUserDetails(
+            @PathVariable String username) {
+
+        userManager.addUser(username);
+        return userManager.getUser(username);
     }
 
-    @PostMapping("/hello")
-    public String helloP(@RequestBody String name) {
-        return "hello" + name;
+    @GetMapping("/home")
+    public HashMap<String, User> getAllUsers() {
+        return userManager.getAllUsers();
     }
 }
